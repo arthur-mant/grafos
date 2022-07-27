@@ -8,7 +8,7 @@ grafo le_grafo(void) {
 }
 //------------------------------------------------------------------------------
 void destroi_grafo(grafo g) {
-  
+  agclose(g);
   return 1;
 }
 //------------------------------------------------------------------------------
@@ -20,31 +20,50 @@ grafo escreve_grafo(grafo g) {
 // -----------------------------------------------------------------------------
 int n_vertices(grafo g) {
   
-  return 0;
+  return agnnodes(g);
 }
 
 // -----------------------------------------------------------------------------
 int n_arestas(grafo g) {
   
-  return 0;
+  return agnedges(g);
 }
 
 // -----------------------------------------------------------------------------
 int grau(vertice v, grafo g) {
-  
-  return 0;
+
+  return agdegree(g, v, TRUE, TRUE);
 }
 
 // -----------------------------------------------------------------------------
 int grau_maximo(grafo g)  {
   
-  return 0;
+  vertice v = agfstnode(g);
+  int grau_max = 0;
+
+  while (v != NILnode) {
+    if (grau(v, g) > grau_max)
+      grau_max = grau(v, g);
+    v = agnxtnode(g, v);
+  }
+
+
+  return grau_max;
 }
 
 // -----------------------------------------------------------------------------
 int grau_minimo(grafo g)  {
+
+  vertice v = agfstnode(g);
+  int grau_min = n_vertices(g);
+
+  while (v != NILnode) {
+    if (grau(v, g) < grau_min)
+      grau_min = grau(v, g);
+    v = agnxtnode(g, v);
+  }
   
-  return 0;
+  return grau_min;
 }
 
 // -----------------------------------------------------------------------------
