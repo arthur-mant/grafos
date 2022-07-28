@@ -68,20 +68,48 @@ int grau_minimo(grafo g)  {
 
 // -----------------------------------------------------------------------------
 int grau_medio(grafo g) {
+
+  vertice v = agfstnode(g);
+  int sum = 0;
+
+  while (v != NILnode) {
+    sum += grau(v, g);
+    v = agnxtnode(g, v);
+  }
   
-  return 0;
+  return sum/n_vertices(g);
+
 }
 
 // -----------------------------------------------------------------------------
 int regular(grafo g) {
-  
-  return 0;
+ 
+  vertice v = agfstnode(g);
+  int k = grau(v, g);
+
+  while (v != NILnode) {
+    if (k != grau(v, g)) 
+      return FALSE;;
+    v = agnxtnode(g, v);
+  }
+
+  return TRUE;
 }
 
 // -----------------------------------------------------------------------------
 int completo(grafo g) {
+
+  vertice v = agfstnode(g);
+  int k = n_vertices(g) - 1;
+
+  while (v != NILnode) {
+    if (k != grau(v, g)) 
+      return FALSE;;
+    v = agnxtnode(g, v);
+  }
+
+  return TRUE;
   
-  return 0;
 }
 
 // -----------------------------------------------------------------------------
@@ -98,14 +126,41 @@ int bipartido(grafo g) {
 
 // -----------------------------------------------------------------------------
 int n_triangulos(grafo g) {
+
   
+
   return 0;
 }
 
 // -----------------------------------------------------------------------------
 int **matriz_adjacencia(grafo g) {
   
-  return NULL;
+  int **m = (int **)malloc(n_vertices(g)*sizeof(int *));
+  vertice v1, v2;
+
+
+  for (int i=0; i<n_vertices(g); i++)
+    m[i] = (int *)malloc(n_vertices(g)*sizeof(int));
+
+  v1 = agfstnode(g);
+
+  for (int i=0; i<n_vertices(g); i++) {
+
+    int j = 0;
+    v2 = agfstnode(g);
+
+    while (v2 != NILnode) {
+      if (agedge(g, v1, v2, NULL, FALSE))
+        m[i][j] = 1;
+      else
+        m[i][j] = 0;
+      v2 = agnxtnode(g, v2);
+      j++;
+    }
+    v1 = agnxtnode(g, v1);
+  }
+  return m;
+      
 }
 
 // -----------------------------------------------------------------------------
