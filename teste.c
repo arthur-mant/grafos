@@ -33,6 +33,14 @@ int main(void) {
     printf("\n");
   }
 
+  printf("\n");
+
+  m = matriz_adjacencia(complemento(g));
+  for (int i=0; i<n_vertices(g); i++) {
+    for (int j=0; j<n_vertices(g); j++)
+      printf("%d ", m[i][j]);
+    printf("\n");
+  }
 
   destroi_grafo(g);
 

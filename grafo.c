@@ -165,7 +165,49 @@ int **matriz_adjacencia(grafo g) {
 
 // -----------------------------------------------------------------------------
 grafo complemento(grafo g) {
-  
-  return NULL;
+
+
+  grafo g_;
+  vertice v, v_, v_aux, v_aux_;
+
+  g_ = agopen("complemento", Agundirected, NULL);
+  v = agfstnode(g);
+
+
+  while (v != NILnode) {
+
+    //printf("%s\n", agnameof(v));
+    v_ = agnode(g_, agnameof(v), TRUE);
+    v = agnxtnode(g, v);
+    //printf("%d\n", n_vertices(g_));
+
+  }
+
+  //printf("vertices criados\n");
+  v = agfstnode(g);
+  v_ = agfstnode(g_);
+  while (v != NILnode) {
+
+    v_aux = agfstnode(g);
+    v_aux_ = agfstnode(g_);
+
+    //printf("%s %s\n", agnameof(v), agnameof(v_aux));
+
+    while (v_aux != NILnode) {
+      //printf("in loop\n");
+      if ((v != v_aux) && (!agedge(g, v, v_aux, NULL, FALSE))) {
+        //printf("creating edge between %s and %s\n", agnameof(v), agnameof(v_aux));
+        agedge(g_,v_, v_aux_, NULL, TRUE);
+      } //else
+        //printf("NOT creating edge between %s and %s\n", agnameof(v), agnameof(v_aux));
+      v_aux = agnxtnode(g, v_aux);
+      v_aux_ = agnxtnode(g_, v_aux_);
+    }
+    //printf("out of loop\n");
+    v = agnxtnode(g, v);
+    v_ = agnxtnode(g_, v_);
+  }
+  //printf("finished graph\n");
+  return g_;
 }
 
