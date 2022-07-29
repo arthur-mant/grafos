@@ -42,6 +42,8 @@ int main(void) {
     printf("\n");
   }
 
+  printf("possui %d triangulos\n", n_triangulos(g));
+
   destroi_grafo(g);
 
   return 0;

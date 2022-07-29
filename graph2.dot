@@ -1,6 +1,4 @@
 graph {
     a -- b -- c
-    d -- b
-    a -- d -- c
     a -- c
 }

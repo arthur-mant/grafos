@@ -1,5 +1,26 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "grafo.h"
+
+int **matrix_multiplication(int **m1, int **m2, int tam) {
+
+  int **m = (int **)malloc(tam*sizeof(int *));
+
+  for (int i=0; i<tam; i++)
+    m[i] = (int *)malloc(tam*sizeof(int));
+
+  for (int i=0; i<tam; i++)
+    for (int j=0; j<tam; j++) {
+      m[i][j] = 0;
+    }
+
+  for (int i=0; i<tam; i++)
+    for (int j=0; j<tam; j++)
+      for (int k=0; k<tam; k++)
+        m[i][j] += m1[i][k]*m2[k][j];
+
+  return m;
+}
 
 //------------------------------------------------------------------------------
 grafo le_grafo(void) {
@@ -127,9 +148,18 @@ int bipartido(grafo g) {
 // -----------------------------------------------------------------------------
 int n_triangulos(grafo g) {
 
-  
+  int sum = 0;
+  int **m = matriz_adjacencia(g);
 
-  return 0;
+  m = matrix_multiplication(m, matrix_multiplication(m, m, n_vertices(g)), n_vertices(g));
+
+  //m = matrix_multiplication(m, m, n_vertices(g));
+
+  for (int i=0; i<n_vertices(g); i++) {
+    sum += m[i][i];
+  }
+
+  return sum/6;
 }
 
 // -----------------------------------------------------------------------------
@@ -170,7 +200,7 @@ grafo complemento(grafo g) {
   grafo g_;
   vertice v, v_, v_aux, v_aux_;
 
-  g_ = agopen("complemento", Agundirected, NULL);
+  g_ = agopen(NULL, Agundirected, NULL);
   v = agfstnode(g);
 
 
