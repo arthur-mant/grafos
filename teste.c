@@ -44,6 +44,17 @@ int main(void) {
 
   printf("possui %d triangulos\n", n_triangulos(g));
 
+  printf("g ");
+  if (!conexo(g))
+    printf("nao ");
+  printf("eh conexo\n");
+
+  printf("g ");
+  if (!bipartido(g))
+    printf("nao ");
+  printf("eh bipartido\n");
+
+
   destroi_grafo(g);
 
   return 0;

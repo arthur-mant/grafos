@@ -135,14 +135,95 @@ int completo(grafo g) {
 
 // -----------------------------------------------------------------------------
 int conexo(grafo g) {
-  
-  return 0;
+
+  int **m = matriz_adjacencia(g);
+  int *visited = (int *)malloc(n_vertices(g)*sizeof(int));
+  int visited_vertices=1;
+
+  for (int i=0; i<n_vertices(g); i++) {
+    visited[i] = FALSE;
+  }
+
+  visited[0] = TRUE;
+  for (int i=0; i<n_vertices(g); i++) {
+    for (int j=0; j<n_vertices(g); j++) {
+      if ((m[i][j] == 1) && !visited[j]) {
+        visited_vertices++;
+        m[i][j] = m[j][i] = 0;
+        visited[j] = TRUE;
+      }
+    }
+  }
+  //printf("visitados: %d\n", visited_vertices);
+  return (visited_vertices == n_vertices(g));
 }
 
 // -----------------------------------------------------------------------------
+int dfs(int **m, int v, char *visitados, int tam, char cor_pai) {
+
+
+/*
+  for (int i=0; i<tam; i++)
+    printf("%c", visitados[i]);
+  printf("\n");
+
+  
+  for (int i=0; i<tam; i++) {
+    for (int j=0; j<tam; j++)
+      printf("%d ", m[i][j]);
+    printf("\n");
+  }
+*/
+  //int aux=TRUE;
+  for (int i=0; i<tam; i++) {
+    if (m[v][i] == 1) {
+  //printf("v: %d, (pai, filho): (%c, %c)\n", v, cor_pai, visitados[v]);
+      m[v][i] = 0;
+      if (cor_pai == 'n')
+        visitados[v] = 'b';
+      else if (cor_pai == 'b' && visitados[v] != 'b')
+        visitados[v] = 'w';
+      else if (cor_pai == 'w' && visitados[v] != 'w')
+        visitados[v] = 'b';
+      else if (cor_pai == 'b' && visitados[v] == 'b')
+        return FALSE;
+      else if (cor_pai == 'w' && visitados[v] == 'w')
+        return FALSE;
+      else
+        printf("error on dfs\n");
+      /*
+      aux = aux && dfs(m, i, visitados, tam, visitados[v]);
+      printf("%d\n", aux);
+      if (!aux)
+        return FALSE;
+      */
+      if (!dfs(m, i, visitados, tam, visitados[v]))
+        return FALSE;
+    }
+  }
+  return TRUE;
+}
+
 int bipartido(grafo g) {
   
-  return 0;
+  int **m = matriz_adjacencia(g);
+  char *visited = (char *)malloc(n_vertices(g)*sizeof(char));
+
+  for (int i=0; i<n_vertices(g); i++)
+    visited[i] = 'n';
+
+
+  for (int i=0; i<n_vertices(g); i++) {
+    if (!dfs(m, i, visited, n_vertices(g), 'n'))
+      return FALSE;
+  }
+/*
+  for (int i=0; i<n_vertices(g); i++)
+    printf("%c", visited[i]);
+  printf("\n");
+*/
+
+  return TRUE;
 }
 
 // -----------------------------------------------------------------------------
