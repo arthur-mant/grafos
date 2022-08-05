@@ -154,30 +154,16 @@ int conexo(grafo g) {
       }
     }
   }
-  //printf("visitados: %d\n", visited_vertices);
+
   return (visited_vertices == n_vertices(g));
 }
 
 // -----------------------------------------------------------------------------
 int dfs(int **m, int v, char *visitados, int tam, char cor_pai) {
 
-
-/*
-  for (int i=0; i<tam; i++)
-    printf("%c", visitados[i]);
-  printf("\n");
-
-  
   for (int i=0; i<tam; i++) {
-    for (int j=0; j<tam; j++)
-      printf("%d ", m[i][j]);
-    printf("\n");
-  }
-*/
-  //int aux=TRUE;
-  for (int i=0; i<tam; i++) {
+    //colors black or white, if conflicts it isnt bipartite
     if (m[v][i] == 1) {
-  //printf("v: %d, (pai, filho): (%c, %c)\n", v, cor_pai, visitados[v]);
       m[v][i] = 0;
       if (cor_pai == 'n')
         visitados[v] = 'b';
@@ -191,12 +177,6 @@ int dfs(int **m, int v, char *visitados, int tam, char cor_pai) {
         return FALSE;
       else
         printf("error on dfs\n");
-      /*
-      aux = aux && dfs(m, i, visitados, tam, visitados[v]);
-      printf("%d\n", aux);
-      if (!aux)
-        return FALSE;
-      */
       if (!dfs(m, i, visitados, tam, visitados[v]))
         return FALSE;
     }
@@ -217,11 +197,6 @@ int bipartido(grafo g) {
     if (!dfs(m, i, visited, n_vertices(g), 'n'))
       return FALSE;
   }
-/*
-  for (int i=0; i<n_vertices(g); i++)
-    printf("%c", visited[i]);
-  printf("\n");
-*/
 
   return TRUE;
 }
@@ -233,8 +208,6 @@ int n_triangulos(grafo g) {
   int **m = matriz_adjacencia(g);
 
   m = matrix_multiplication(m, matrix_multiplication(m, m, n_vertices(g)), n_vertices(g));
-
-  //m = matrix_multiplication(m, m, n_vertices(g));
 
   for (int i=0; i<n_vertices(g); i++) {
     sum += m[i][i];
@@ -287,14 +260,11 @@ grafo complemento(grafo g) {
 
   while (v != NILnode) {
 
-    //printf("%s\n", agnameof(v));
     v_ = agnode(g_, agnameof(v), TRUE);
     v = agnxtnode(g, v);
-    //printf("%d\n", n_vertices(g_));
 
   }
 
-  //printf("vertices criados\n");
   v = agfstnode(g);
   v_ = agfstnode(g_);
   while (v != NILnode) {
@@ -302,23 +272,16 @@ grafo complemento(grafo g) {
     v_aux = agfstnode(g);
     v_aux_ = agfstnode(g_);
 
-    //printf("%s %s\n", agnameof(v), agnameof(v_aux));
-
     while (v_aux != NILnode) {
-      //printf("in loop\n");
       if ((v != v_aux) && (!agedge(g, v, v_aux, NULL, FALSE))) {
-        //printf("creating edge between %s and %s\n", agnameof(v), agnameof(v_aux));
         agedge(g_,v_, v_aux_, NULL, TRUE);
-      } //else
-        //printf("NOT creating edge between %s and %s\n", agnameof(v), agnameof(v_aux));
+      } 
       v_aux = agnxtnode(g, v_aux);
       v_aux_ = agnxtnode(g_, v_aux_);
     }
-    //printf("out of loop\n");
     v = agnxtnode(g, v);
     v_ = agnxtnode(g_, v_);
   }
-  //printf("finished graph\n");
   return g_;
 }
 
